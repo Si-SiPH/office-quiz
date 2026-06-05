@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบแบบทดสอบภายในหน่วยงาน</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div id="login-screen" class="screen active">
+            <h2>ลงทะเบียนเข้าสอบ</h2>
+            <div class="form-group">
+                <label for="emp-id">รหัสพนักงาน:</label>
+                <input type="text" id="emp-id" placeholder="เช่น EMP001" required>
+            </div>
+            <div class="form-group">
+                <label for="emp-name">ชื่อ - นามสกุล:</label>
+                <input type="text" id="emp-name" placeholder="ไม่ต้องใส่คำนำหน้านาม" required>
+            </div>
+            <div class="form-group">
+                <label for="emp-dept">แผนก / ฝ่าย:</label>
+                <select id="emp-dept">
+                    <option value="HR">ทรัพยากรบุคคล (HR)</option>
+                    <option value="IT">เทคโนโลยีสารสนเทศ (IT)</option>
+                    <option value="Sales">ฝ่ายขาย / การตลาด</option>
+                    <option value="Operation">ฝ่ายปฏิบัติการ</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quiz-set">เลือกชุดแบบทดสอบ:</label>
+                <select id="quiz-set">
+                    <option value="1">ชุดที่ 1</option>
+                    <option value="2">ชุดที่ 2</option>
+                    <option value="3">ชุดที่ 3</option>
+                    <option value="4">ชุดที่ 4</option>
+                    <option value="5">ชุดที่ 5</option>
+                </select>
+            </div>
+            <button onclick="startQuiz()">เริ่มทำแบบทดสอบ</button>
+        </div>
+
+        <div id="quiz-screen" class="screen">
+            <h2>กำลังทำแบบทดสอบ</h2>
+            <div id="user-display" style="font-size: 14px; color: #666; text-align: center; margin-bottom: 10px;"></div>
+            <hr>
+            <div id="quiz-area">
+                <p>ระบบกำลังดึงข้อสอบ...</p>
+            </div>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <h2>สรุปผลการทดสอบ</h2>
+            <div id="result-area"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
