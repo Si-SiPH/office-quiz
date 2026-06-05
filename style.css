@@ -1,0 +1,70 @@
+/* ตั้งค่าฟอนต์และพื้นหลังของเว็บ */
+body { 
+    font-family: 'Helvetica Neue', Tahoma, sans-serif; 
+    padding: 20px; 
+    background-color: #f0f2f5; 
+    color: #333; 
+}
+
+/* กล่องสีขาวตรงกลางจอ */
+.container { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+    max-width: 500px; 
+    margin: 40px auto; 
+}
+
+h2 { 
+    text-align: center; 
+    color: #1a73e8; 
+    margin-bottom: 20px; 
+}
+
+/* สไตล์สำหรับฟอร์มกรอกข้อมูล */
+.form-group { 
+    margin-bottom: 15px; 
+}
+
+.form-group label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+}
+
+.form-group input, .form-group select { 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    box-sizing: border-box; 
+    font-size: 16px; 
+}
+
+/* สไตล์ปุ่มกด */
+button { 
+    width: 100%; 
+    padding: 12px; 
+    background-color: #1a73e8; 
+    color: white; 
+    border: none; 
+    border-radius: 6px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+button:hover { 
+    background-color: #1557b0; 
+}
+
+/* ซ่อนหน้าจอที่ยังไม่ได้ใช้งาน */
+.screen { 
+    display: none; 
+}
+
+/* แสดงเฉพาะหน้าจอที่มีคลาส active */
+.active { 
+    display: block; 
+}
