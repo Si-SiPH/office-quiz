@@ -21,10 +21,12 @@ async function checkLogin() {
     const id = document.getElementById('emp-id').value.trim();
     const name = document.getElementById('emp-name').value.trim();
     const pin = document.getElementById('emp-pin').value.trim();
-    // สุ่มตัวเลข 1 ถึง 5 อัตโนมัติ
-    const quizSet = Math.floor(Math.random() * 5) + 1;
+    
+    // บรรทัดนี้ต้องแก้เป็นคำสั่งสุ่มตัวเลขแบบนี้เท่านั้น (ห้ามมีคำว่า getElementById แล้ว)
+    const quizSet = Math.floor(Math.random() * 5) + 1; 
+    
     const loginBtn = document.getElementById('login-btn');
-
+    
     // 1. ตรวจสอบเบื้องต้นว่ากรอกรหัสพนักงานกับ PIN หรือยัง
     if (!id || !pin) {
         alert('กรุณากรอกรหัสพนักงานและรหัส PIN ');
