@@ -78,7 +78,7 @@ async function checkLogin() {
         // แสดงผลแค่ ชื่อ รหัส และ แผนก
         document.getElementById('user-display').innerText = 
             `ผู้สอบ: ${currentUser.empName} (${currentUser.empId}) | แผนก: ${currentUser.empDept}`;
-
+       
         document.getElementById('login-screen').classList.remove('active');
         document.getElementById('quiz-screen').classList.add('active');
 
