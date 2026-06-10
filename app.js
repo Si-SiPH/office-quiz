@@ -21,7 +21,8 @@ async function checkLogin() {
     const id = document.getElementById('emp-id').value.trim();
     const name = document.getElementById('emp-name').value.trim();
     const pin = document.getElementById('emp-pin').value.trim();
-    const quizSet = document.getElementById('quiz-set').value;
+    // สุ่มตัวเลข 1 ถึง 5 อัตโนมัติ
+    const quizSet = Math.floor(Math.random() * 5) + 1;
     const loginBtn = document.getElementById('login-btn');
 
     // 1. ตรวจสอบเบื้องต้นว่ากรอกรหัสพนักงานกับ PIN หรือยัง
