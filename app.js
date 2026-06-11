@@ -27,11 +27,11 @@ async function checkLogin() {
     const loginBtn = document.getElementById('login-btn');
 
     if (!id || !pin) {
-        alert('กรุณากรอกรหัสพนักงานและรหัส PIN ด้วยครับ');
+        alert('กรุณากรอกรหัสพนักงานและรหัส PIN ');
         return;
     }
     if (pin.length !== 4 || isNaN(pin)) {
-        alert('รหัส PIN ต้องเป็นตัวเลข 4 หลักเท่านั้นครับ');
+        alert('รหัส PIN ต้องเป็นตัวเลข 4 หลักเท่านั้น');
         return;
     }
 
@@ -52,7 +52,7 @@ async function checkLogin() {
 
         if (empData.pin_code === "") {
             if (!name) {
-                alert('💡 เนื่องจากการเข้าใช้งานครั้งแรก กรุณากรอก "ชื่อ-นามสกุล" เพื่อยืนยันตัวตนในการตั้งรหัส PIN ด้วยครับ');
+                alert('💡 เนื่องจากการเข้าใช้งานครั้งแรก กรุณากรอก "ชื่อ-นามสกุล" เพื่อยืนยันตัวตนในการตั้งรหัส PIN ');
                 resetLoginButton();
                 return;
             }
