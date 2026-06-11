@@ -89,6 +89,18 @@
 
             statusDiv.innerHTML = `<span style="color: green;">🎉 นำเข้าสำเร็จ ${successCount} รายการ! สามารถเข้าไปเช็คใน Firebase ได้เลยครับ</span>`;
         }
+        // โค้ดสำหรับบังคับให้กล่อง Textarea สามารถกดปุ่ม Tab เพื่อเว้นวรรคได้
+        document.getElementById('excel-data').addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+        e.preventDefault();
+        var start = this.selectionStart;
+        var end = this.selectionEnd;
+        // แทรกตัวอักษร Tab (\t) ลงไปตรงจุดที่เคอร์เซอร์อยู่
+        this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
+        // เลื่อนเคอร์เซอร์ไปด้านหลัง Tab ที่เพิ่งแทรก
+        this.selectionStart = this.selectionEnd = start + 1;
+    }
+});
     </script>
 </body>
 </html>
