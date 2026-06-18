@@ -104,6 +104,7 @@ async function loadQuestions() {
         
         displayQuestion();
         document.getElementById('nav-buttons').style.display = 'flex'; // โชว์ปุ่มนำทาง
+        startTimer();
     } catch (error) {
         document.getElementById('quiz-area').innerHTML = "<p style='color:red;'>ไม่สามารถดึงข้อสอบได้</p>";
     }
@@ -212,6 +213,55 @@ function promptExitQuiz() { showModal("ออกจากระบบ?", "คะ
 
 // 7. คำนวณคะแนนตอนจบและแสดงผล
 async function submitQuiz() {
+    async function submitQuiz() {
+    // 🌟 ตำแหน่งย่อยที่ 1: วางโค้ด 5 บรรทัดนี้ไว้ "บนสุด" ของฟังก์ชันเพื่อหยุดเวลาและคำนวณทันที
+    clearInterval(timerInterval);
+    let totalSecondsUsed = 3600 - timeLimitSeconds;
+    let minsUsed = Math.floor(totalSecondsUsed / 60);
+    let secsUsed = totalSecondsUsed % 60;
+    let timeSpentFormatted = `${minsUsed} นาที ${secsUsed} วินาที`;
+
+    let finalScore = 0;
+    for(let i=0; i<20; i++) {
+        if (userAnswers[i] === quizQuestions[i].answer) {
+            finalScore++;
+        }
+    }
+
+    document.getElementById('progress-bar-fill').style.width = '100%';
+    document.getElementById('progress-text').innerText = `ทำครบ 20 / 20 ข้อ`;
+    document.getElementById('quiz-screen').classList.remove('active');
+    document.getElementById('result-screen').classList.add('active');
+
+    const passed = finalScore >= 16;
+    const statusBg = passed ? "#e6f4ea" : "#fce8e6";
+    const statusColor = passed ? "#137333" : "#c5221f";
+
+    // 🌟 ตำแหน่งย่อยที่ 2: เพิ่มแท็ก <p> แสดงเวลาทำข้อสอบ (บรรทัดล่างสุดในกล่องสีส้ม/เขียว)
+    document.getElementById('result-area').innerHTML = `
+        <div style="text-align: center; padding: 30px; border-radius: 16px; background-color: ${statusBg}; color: ${statusColor}; margin-bottom: 20px;">
+            <h3 style="margin: 0 0 10px 0;">${passed ? "🎉 ผ่านเกณฑ์" : "❌ ไม่ผ่านเกณฑ์"}</h3>
+            <p style="font-size: 40px; font-weight: 600; margin: 0;">${finalScore} / 20</p>
+            <p style="margin: 10px 0 0 0;">คิดเป็น ${(finalScore/20*100)}% (เกณฑ์ผ่าน 80%)</p>
+            <p style="margin: 10px 0 0 0; font-size: 14px; color: #555;">⏱️ ใช้เวลาทดสอบ: ${timeSpentFormatted}</p>
+        </div>
+    `;
+
+    // 🌟 ตำแหน่งย่อยที่ 3: เพิ่มฟิลด์ time_spent เพื่อบันทึกเวลาที่ใช้จริงส่งไปเก็บที่ Firebase
+    try {
+        await db.collection('quiz_results').add({
+            employee_id: currentUser.empId, 
+            employee_name: currentUser.empName, 
+            department: currentUser.empDept,
+            score: finalScore, 
+            total_questions: 20, 
+            percentage: (finalScore / 20 * 100),
+            status: passed ? "ผ่าน" : "ไม่ผ่าน", 
+            time_spent: timeSpentFormatted,     // <-- แทรกบรรทัดนี้เพิ่มเข้าไปครับ
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    } catch (error) { console.error("Error saving:", error); }
+}
     let finalScore = 0;
     
     // ตรวจคำตอบทั้งหมด 20 ข้อ
