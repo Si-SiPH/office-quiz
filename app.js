@@ -55,26 +55,25 @@ async function checkLogin() {
 
         loadQuestions();
         function startTimer() {
-    if (timerStarted) return;
-    timerStarted = true;
-    timerInterval = setInterval(() => {
-        timeLimitSeconds--;
-        let minutes = Math.floor(timeLimitSeconds / 60);
-        let seconds = timeLimitSeconds % 60;
-        const timerDisplay = document.getElementById('timer-display');
-        timerDisplay.innerText = `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-        if (timeLimitSeconds === 300) { // เหลือ 5 นาที
-            timerDisplay.classList.add('warning-pulse');
-            alert('⚠️ แจ้งเตือน: เหลือเวลาทำแบบทดสอบอีก 5 นาทีสุดท้าย!');
+            if (timerStarted) return;
+            timerStarted = true;
+            timerInterval = setInterval(() => {
+                timeLimitSeconds--;
+                let minutes = Math.floor(timeLimitSeconds / 60);
+                let seconds = timeLimitSeconds % 60;
+                const timerDisplay = document.getElementById('timer-display');
+                timerDisplay.innerText = `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLimitSeconds === 300) { // เหลือ 5 นาที
+                timerDisplay.classList.add('warning-pulse');
+                alert('⚠️ แจ้งเตือน: เหลือเวลาทำแบบทดสอบอีก 5 นาทีสุดท้าย!');
+            }
+            if (timeLimitSeconds <= 0) { // หมดเวลา
+                clearInterval(timerInterval);
+                alert("⏱️ หมดเวลาทำแบบทดสอบ (1 ชั่วโมง) ระบบจะทำการรีเซ็ตหน้าจอ");
+                location.reload();
+            }
+            }, 1000);
         }
-        if (timeLimitSeconds <= 0) { // หมดเวลา
-            clearInterval(timerInterval);
-            alert("⏱️ หมดเวลาทำแบบทดสอบ (1 ชั่วโมง) ระบบจะทำการรีเซ็ตหน้าจอ");
-            location.reload();
-        }
-    }, 1000);
-}
     } catch (error) {
         console.error("Login Error:", error); alert("เกิดข้อผิดพลาดของระบบ"); resetLoginButton();
     }
