@@ -15,6 +15,9 @@ let currentUser = {};
 let quizQuestions = [];
 let currentQuestionIndex = 0;
 let userAnswers = []; // ตัวแปร Array ไว้จำคำตอบ 20 ข้อ
+let timerInterval;
+let timeLimitSeconds = 3600; // 1 ชั่วโมง
+let timerStarted = false;
 
 // 1. ฟังก์ชัน Login
 async function checkLogin() {
