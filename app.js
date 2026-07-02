@@ -55,6 +55,10 @@ async function checkLogin() {
 
         loadQuestions();
     } catch (error) {
+        console.error("🔥 เจอสาเหตุแล้ว:", error);
+        document.getElementById('quiz-area').innerHTML = "<p style='color:red;'>ไม่สามารถดึงข้อสอบได้</p>";
+    }
+    {
         console.error("Login Error:", error); alert("เกิดข้อผิดพลาดของระบบ"); resetLoginButton();
     }
 }
