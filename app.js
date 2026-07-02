@@ -54,26 +54,6 @@ async function checkLogin() {
         document.getElementById('quiz-screen').classList.add('active');
 
         loadQuestions();
-        function startTimer() {
-            if (timerStarted) return;
-            timerStarted = true;
-            timerInterval = setInterval(() => {
-                timeLimitSeconds--;
-                let minutes = Math.floor(timeLimitSeconds / 60);
-                let seconds = timeLimitSeconds % 60;
-                const timerDisplay = document.getElementById('timer-display');
-                timerDisplay.innerText = `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            if (timeLimitSeconds === 300) { // เหลือ 5 นาที
-                timerDisplay.classList.add('warning-pulse');
-                alert('⚠️ แจ้งเตือน: เหลือเวลาทำแบบทดสอบอีก 5 นาทีสุดท้าย!');
-            }
-            if (timeLimitSeconds <= 0) { // หมดเวลา
-                clearInterval(timerInterval);
-                alert("⏱️ หมดเวลาทำแบบทดสอบ (1 ชั่วโมง) ระบบจะทำการรีเซ็ตหน้าจอ");
-                location.reload();
-            }
-            }, 1000);
-        }
     } catch (error) {
         console.error("Login Error:", error); alert("เกิดข้อผิดพลาดของระบบ"); resetLoginButton();
     }
@@ -82,6 +62,29 @@ async function checkLogin() {
 function resetLoginButton() {
     const loginBtn = document.getElementById('login-btn');
     loginBtn.innerText = "ตรวจสอบข้อมูลและเข้าสอบ"; loginBtn.disabled = false;
+}
+
+// 🌟 ระบบนาฬิกาถูกจับแยกออกมาข้างนอกให้แล้วครับ
+function startTimer() {
+    if (timerStarted) return;
+    timerStarted = true;
+    timerInterval = setInterval(() => {
+        timeLimitSeconds--;
+        let minutes = Math.floor(timeLimitSeconds / 60);
+        let seconds = timeLimitSeconds % 60;
+        const timerDisplay = document.getElementById('timer-display');
+        timerDisplay.innerText = `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLimitSeconds === 300) { // เหลือ 5 นาที
+            timerDisplay.classList.add('warning-pulse');
+            alert('⚠️ แจ้งเตือน: เหลือเวลาทำแบบทดสอบอีก 5 นาทีสุดท้าย!');
+        }
+        if (timeLimitSeconds <= 0) { // หมดเวลา
+            clearInterval(timerInterval);
+            alert("⏱️ หมดเวลาทำแบบทดสอบ (1 ชั่วโมง) ระบบจะทำการรีเซ็ตหน้าจอ");
+            location.reload();
+        }
+    }, 1000);
 }
 
 // 2. โหลดและสุ่มข้อสอบ
@@ -100,11 +103,11 @@ async function loadQuestions() {
 
         quizQuestions = allQuestions.slice(0, 20);
         currentQuestionIndex = 0;
-        userAnswers = new Array(20).fill(null); // สร้างที่เก็บคำตอบว่างๆ 20 ช่อง
+        userAnswers = new Array(20).fill(null); 
         
         displayQuestion();
-        document.getElementById('nav-buttons').style.display = 'flex'; // โชว์ปุ่มนำทาง
-        startTimer();
+        document.getElementById('nav-buttons').style.display = 'flex'; 
+        startTimer(); // สั่งรันนาฬิกาตรงนี้ทำงานได้แล้ว
     } catch (error) {
         document.getElementById('quiz-area').innerHTML = "<p style='color:red;'>ไม่สามารถดึงข้อสอบได้</p>";
     }
@@ -112,14 +115,13 @@ async function loadQuestions() {
 
 // 3. แสดงข้อสอบ
 function displayQuestion() {
-    // อัปเดต Progress Bar
     const progressPercent = ((currentQuestionIndex) / 20) * 100;
     document.getElementById('progress-bar-fill').style.width = `${progressPercent}%`;
     document.getElementById('progress-text').innerText = `ข้อที่ ${currentQuestionIndex + 1} / 20`;
 
     const quizArea = document.getElementById('quiz-area');
     const currentQuiz = quizQuestions[currentQuestionIndex];
-    const savedAnswer = userAnswers[currentQuestionIndex]; // ดึงคำตอบที่เคยเลือกไว้
+    const savedAnswer = userAnswers[currentQuestionIndex]; 
 
     let html = `<div style="margin-bottom: 20px; font-weight: 500; font-size: 18px; color: var(--navy); line-height: 1.5;">
                     ${currentQuestionIndex + 1}. ${currentQuiz.question}
@@ -127,35 +129,29 @@ function displayQuestion() {
 
     currentQuiz.options.forEach((option, index) => {
         const optionNum = index + 1;
-        // ถ้าข้อนี้เคยตอบไว้แล้ว ให้ใส่คลาส selected เพื่อไฮไลท์สี
         const isSelected = (savedAnswer === optionNum) ? 'selected' : '';
         html += `<button class="option-btn ${isSelected}" id="opt-${optionNum}" onclick="selectOption(${optionNum})">${optionNum}. ${option}</button>`;
     });
 
     quizArea.innerHTML = html;
 
-    // จัดการปุ่มด้านล่าง (ถอยหลัง - เดินหน้า)
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
 
-    // ถ้าอยู่ข้อแรก ซ่อนปุ่มถอยหลัง
     prevBtn.style.visibility = (currentQuestionIndex === 0) ? 'hidden' : 'visible';
     
-    // ถ้าอยู่ข้อสุดท้าย เปลี่ยนปุ่มถัดไปเป็นปุ่มส่งข้อสอบ
     if (currentQuestionIndex === 19) {
         nextBtn.innerText = "ส่งแบบทดสอบ ✅";
-        nextBtn.style.backgroundColor = "#137333"; // สีเขียว
+        nextBtn.style.backgroundColor = "#137333"; 
     } else {
         nextBtn.innerText = "ถัดไป ❯";
         nextBtn.style.backgroundColor = "var(--navy)";
     }
 }
 
-// 4. บันทึกคำตอบเมื่อจิ้มเลือก (Auto Save เบื้องหลัง)
+// 4. บันทึกคำตอบเมื่อจิ้มเลือก 
 function selectOption(selectedNum) {
-    userAnswers[currentQuestionIndex] = selectedNum; // จำคำตอบลง Array
-    
-    // เปลี่ยนสีไฮไลท์
+    userAnswers[currentQuestionIndex] = selectedNum; 
     for(let i=1; i<=4; i++) {
         document.getElementById(`opt-${i}`).classList.remove('selected');
     }
@@ -164,57 +160,37 @@ function selectOption(selectedNum) {
 
 // 5. ปุ่มถัดไป / ส่งข้อสอบ
 function nextQuestion() {
-    // บังคับให้ต้องเลือกคำตอบก่อนถึงจะไปต่อได้
     if (userAnswers[currentQuestionIndex] === null) {
         alert("กรุณาเลือกคำตอบก่อนไปข้อถัดไปครับ");
         return;
     }
-
     if (currentQuestionIndex < 19) {
         currentQuestionIndex++;
         displayQuestion();
     } else {
-        // อยู่ข้อ 20 กดยืนยันส่งข้อสอบ
-        showModal(
-            "ยืนยันการส่งแบบทดสอบ?", 
-            "คุณทำข้อสอบครบแล้ว ต้องการส่งแบบทดสอบเพื่อดูผลคะแนนเลยใช่หรือไม่? (จะไม่สามารถกลับมาแก้ไขได้อีก)", 
-            submitQuiz, 
-            "ส่งข้อสอบ"
-        );
+        showModal("ยืนยันการส่งแบบทดสอบ?", "คุณทำข้อสอบครบแล้ว ต้องการส่งแบบทดสอบเพื่อดูผลคะแนนเลยใช่หรือไม่? (จะไม่สามารถกลับมาแก้ไขได้อีก)", submitQuiz, "ส่งข้อสอบ");
     }
 }
 
 // 6. ปุ่มถอยหลังกลับไปแก้ไข
 function promptPrevQuestion() {
-    showModal(
-        "ต้องการย้อนกลับ?", 
-        "คุณต้องการกลับไปดูหรือแก้ไขคำตอบในข้อก่อนหน้าใช่หรือไม่?", 
-        () => {
-            currentQuestionIndex--;
-            displayQuestion();
-        }, 
-        "ใช่, กลับไปแก้ไข"
-    );
+    showModal("ต้องการย้อนกลับ?", "คุณต้องการกลับไปดูหรือแก้ไขคำตอบในข้อก่อนหน้าใช่หรือไม่?", () => { currentQuestionIndex--; displayQuestion(); }, "ใช่, กลับไปแก้ไข");
 }
 
 // ระบบ Modal แจ้งเตือน
 function showModal(title, desc, confirmCallback, confirmText) {
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-desc').innerText = desc;
-    
     const confirmBtn = document.getElementById('modal-confirm-btn');
     confirmBtn.innerText = confirmText;
     confirmBtn.onclick = () => { closeModal(); confirmCallback(); };
-
     document.getElementById('custom-modal').style.display = 'flex';
 }
 function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
 function promptExitQuiz() { showModal("ออกจากระบบ?", "คะแนนที่ทำไว้จะสูญหาย ต้องการออกใช่หรือไม่?", () => location.reload(), "ออกจากระบบ"); }
 
-// 7. คำนวณคะแนนตอนจบและแสดงผล
+// 7. คำนวณคะแนนตอนจบและแสดงผล (🌟 ล้างโค้ดที่ซ้อนทับกันให้แล้วครับ 🌟)
 async function submitQuiz() {
-    async function submitQuiz() {
-    // 🌟 ตำแหน่งย่อยที่ 1: วางโค้ด 5 บรรทัดนี้ไว้ "บนสุด" ของฟังก์ชันเพื่อหยุดเวลาและคำนวณทันที
     clearInterval(timerInterval);
     let totalSecondsUsed = 3600 - timeLimitSeconds;
     let minsUsed = Math.floor(totalSecondsUsed / 60);
@@ -237,7 +213,6 @@ async function submitQuiz() {
     const statusBg = passed ? "#e6f4ea" : "#fce8e6";
     const statusColor = passed ? "#137333" : "#c5221f";
 
-    // 🌟 ตำแหน่งย่อยที่ 2: เพิ่มแท็ก <p> แสดงเวลาทำข้อสอบ (บรรทัดล่างสุดในกล่องสีส้ม/เขียว)
     document.getElementById('result-area').innerHTML = `
         <div style="text-align: center; padding: 30px; border-radius: 16px; background-color: ${statusBg}; color: ${statusColor}; margin-bottom: 20px;">
             <h3 style="margin: 0 0 10px 0;">${passed ? "🎉 ผ่านเกณฑ์" : "❌ ไม่ผ่านเกณฑ์"}</h3>
@@ -247,7 +222,6 @@ async function submitQuiz() {
         </div>
     `;
 
-    // 🌟 ตำแหน่งย่อยที่ 3: เพิ่มฟิลด์ time_spent เพื่อบันทึกเวลาที่ใช้จริงส่งไปเก็บที่ Firebase
     try {
         await db.collection('quiz_results').add({
             employee_id: currentUser.empId, 
@@ -257,43 +231,8 @@ async function submitQuiz() {
             total_questions: 20, 
             percentage: (finalScore / 20 * 100),
             status: passed ? "ผ่าน" : "ไม่ผ่าน", 
-            time_spent: timeSpentFormatted,     // <-- แทรกบรรทัดนี้เพิ่มเข้าไปครับ
+            time_spent: timeSpentFormatted,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-    } catch (error) { console.error("Error saving:", error); }
-}
-    let finalScore = 0;
-    
-    // ตรวจคำตอบทั้งหมด 20 ข้อ
-    for(let i=0; i<20; i++) {
-        if (userAnswers[i] === quizQuestions[i].answer) {
-            finalScore++;
-        }
-    }
-
-    document.getElementById('progress-bar-fill').style.width = '100%';
-    document.getElementById('progress-text').innerText = `ทำครบ 20 / 20 ข้อ`;
-    document.getElementById('quiz-screen').classList.remove('active');
-    document.getElementById('result-screen').classList.add('active');
-
-    const passed = finalScore >= 16;
-    const statusBg = passed ? "#e6f4ea" : "#fce8e6";
-    const statusColor = passed ? "#137333" : "#c5221f";
-
-    document.getElementById('result-area').innerHTML = `
-        <div style="text-align: center; padding: 30px; border-radius: 16px; background-color: ${statusBg}; color: ${statusColor}; margin-bottom: 20px;">
-            <h3 style="margin: 0 0 10px 0;">${passed ? "🎉 ผ่านเกณฑ์" : "❌ ไม่ผ่านเกณฑ์"}</h3>
-            <p style="font-size: 40px; font-weight: 600; margin: 0;">${finalScore} / 20</p>
-            <p style="margin: 10px 0 0 0;">คิดเป็น ${(finalScore/20*100)}% (เกณฑ์ผ่าน 80%)</p>
-        </div>
-    `;
-
-    // บันทึกลง Firebase
-    try {
-        await db.collection('quiz_results').add({
-            employee_id: currentUser.empId, employee_name: currentUser.empName, department: currentUser.empDept,
-            score: finalScore, total_questions: 20, percentage: (finalScore / 20 * 100),
-            status: passed ? "ผ่าน" : "ไม่ผ่าน", timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
     } catch (error) { console.error("Error saving:", error); }
 }
